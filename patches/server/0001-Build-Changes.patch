@@ -1,0 +1,59 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: willies952002 <admin@domnian.com>
+Date: Sun, 20 Jun 2021 11:03:26 -0400
+Subject: [PATCH] Build Changes
+
+
+diff --git a/build.gradle.kts b/build.gradle.kts
+index 04938bb10c35d2e424043adb7ed8fec2e42bb816..cd06e3bbbd5822bb7e946e92b97d70c0bac56235 100644
+--- a/build.gradle.kts
++++ b/build.gradle.kts
+@@ -18,8 +18,8 @@ repositories {
+ }
+ 
+ dependencies {
+-    implementation(project(":Paper-API"))
+-    implementation(project(":Paper-MojangAPI"))
++    implementation(project(":Lodestone-API")) // Lodestone
++    implementation("com.destroystokyo.paper:paper-mojangapi:1.16.5-R0.1-SNAPSHOT") // Lodestone
+     // Paper start
+     implementation("org.jline:jline-terminal-jansi:3.12.1")
+     implementation("net.minecrell:terminalconsoleappender:1.2.0")
+@@ -50,6 +50,13 @@ dependencies {
+     implementation("co.aikar:cleaner:1.0-SNAPSHOT") // Paper
+     implementation("io.netty:netty-all:4.1.65.Final") // Paper
+ 
++    // Lodestone start
++    implementation("com.zaxxer:HikariCP:2.7.1")
++    implementation("net.minidev:json-smart:1.1.1")
++    implementation("org.json:json:20160212")
++    implementation("net.sf.jopt-simple:jopt-simple:5.0.4")
++    // Lodestone end
++
+     implementation("com.github.oshi:oshi-core:5.7.5") // Paper - fix startup delay and warning
+ 
+     testImplementation("io.github.classgraph:classgraph:4.8.47") // Paper - mob goal test
+@@ -62,11 +69,12 @@ tasks.jar {
+ 
+     manifest {
+         val git = Git(rootProject.layout.projectDirectory.path)
+-        val gitHash = git("rev-parse", "HEAD").getText().substring(0, 7)
++//        val gitHash = git("rev-parse", "HEAD").getText().substring(0, 7)
++        var gitHash = "dev"
+         attributes(
+             "Main-Class" to "org.bukkit.craftbukkit.Main",
+             "Implementation-Title" to "CraftBukkit",
+-            "Implementation-Version" to "git-Paper-\"$gitHash\"",
++            "Implementation-Version" to "git-Lodestone-\"$gitHash\"",
+             "Implementation-Vendor" to SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(Date()), // Paper
+             "Specification-Title" to "Bukkit",
+             "Specification-Version" to project.version,
+@@ -122,7 +130,7 @@ tasks.test {
+ fun TaskContainer.registerRunTask(
+     name: String, block: JavaExec.() -> Unit
+ ): TaskProvider<JavaExec> = register<JavaExec>(name) {
+-    group = "paper"
++    group = "lodestone"
+     standardInput = System.`in`
+     workingDir = rootProject.layout.projectDirectory.dir(
+         providers.gradleProperty("runWorkDir").forUseAtConfigurationTime().orElse("run")
